@@ -36,12 +36,12 @@ const registerUser = asyncHandler(async (req,res)=>{
     //we're checking for avatar,
     //Also, we've used .path so that we cannot know about
     //the path where multer stored the file if in case anything goes wrong
-    const avatarLocalPath = req.files?.avatar[0]?.path
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    const avatarLocalPath = req.files?.avatar?.[0]?.path
+    const coverImageLocalPath = req.files?.coverImage?.[0]?.path
 
 
     if(!avatarLocalPath){
-        throw new ApiError(400, "avatar File is missing!!");
+        throw new ApiError(400, "Avatar file is missing");
     }
     //let's upload the avatar 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
@@ -49,14 +49,14 @@ const registerUser = asyncHandler(async (req,res)=>{
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
     if(!avatar){
-        throw new ApiError(400, "Avatar  is missing!!");
+        throw new ApiError(400, "Avatar upload failed");
     }
 
     const user = await User.create({
         fullName,
-        avatar : avatar.url,
-        coverImage : coverImage?.url || "",
-        username: username.toLoweCase(),
+        avatar: avatar.secure_url || avatar.url,
+        coverImage: (coverImage?.secure_url || coverImage?.url || ""),
+        username: username.toLowerCase(),
         email,
         password
     })
