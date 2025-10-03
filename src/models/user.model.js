@@ -7,7 +7,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique : true,
-            lowerCase : true,
+            lowercase : true,
             trim : true,
             index : true
         },
@@ -15,14 +15,14 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique : true,
-            lowerCase : true,
+            lowercase : true,
             trim : true,
         },
         fullName:{
             type: String,
             required: true,
             trim : true,
-            idnex:true
+            index:true
         },
         avatar:{
             type: String,
@@ -41,7 +41,7 @@ const userSchema = new Schema(
         },
         refreshToken:{
             type: String,
-            required: true,
+            default: "",
         }
     },
     {
