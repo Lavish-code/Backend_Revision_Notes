@@ -7,7 +7,7 @@ code properly ..... isliye we try to make the server.js as free as we can
 
 import connectDB from "./db/index.js";
 import dotenv from "dotenv";
-import { app } from "./app.js";
+import {app} from "./app.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;

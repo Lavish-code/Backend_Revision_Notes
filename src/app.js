@@ -29,4 +29,11 @@ app.use(cookieParser())
 
 
 
-export { app }
+//routes import
+import userRouter from './routes/user.router.js'
+
+
+//routes declearation
+app.use("/api/v1/users",userRouter)
+
+export {app}
