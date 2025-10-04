@@ -1,6 +1,10 @@
-import {v2 as cloudinary} from "cloudinary";
-import {response} from "express";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 import fs from "fs"; // It helps in read write file 
+
+
+dotenv.config();
+
 
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_NAME, 
@@ -9,19 +13,48 @@ cloudinary.config({
 });
 
 
+// const uploadOnCloudinary = async (localFilePath)=>{
+//     try{
+//         if(!localFilePath) return null;
+//         //UPLOAD THE FILE ON CLOUDINARY
+//         const response = await cloudinary.uploader.upload(localFilePath, {
+//             resource_type : "auto"
+//         })
+//         fs.unlinkSync(localFilePath)
+//         return response;
+//     }catch(error){
+//         fs.unlinkSync(localFilePath)//remove the locally saved temporay  file as the upload operation got failed 
+//         return null
+//     }
+// }
+
+
 const uploadOnCloudinary = async (localFilePath)=>{
     try{
-        if(!localFilePath) return null
+        if(!localFilePath) return null;
         //UPLOAD THE FILE ON CLOUDINARY
-        cloudinary.uploader.upload(localFilePath, {
-            resource_type : "auto"
-        })
-        console.log("File is uploaded on Cloudinary" , response.url);
-        return response;
+        const result = await cloudinary.uploader.upload(localFilePath, {
+            resource_type : "auto",
+        });
+
+
+        try{
+            fs.unlinkSync(localFilePath);
+        }catch(_){
+
+        }
+        //console.log("File is uploaded on cloudinary", result.url || result.secure_url);
+        return result;
     }catch(error){
-        fs.unlinkSync(localFilePath)//remove the locally saved temporay  file as the upload operation got failed 
+        try {
+            if(localFilePath) fs.unlinkSync(localFilePath)
+        } catch (_) {}
+        //remove the locally saved temporay  file as the upload operation got failed 
         return null
     }
-}
+};
+
+
+
     
-export {uploadOnCloudinary}
+export { uploadOnCloudinary }
